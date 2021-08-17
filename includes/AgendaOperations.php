@@ -1,5 +1,5 @@
 <?php
- class LoginSignupOpereation{
+ class AgendaOperation{
 
         private $con; 
 

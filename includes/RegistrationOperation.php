@@ -1,5 +1,5 @@
 <?php
- class MeetingsOpereation{
+ class RegistrationOperation{
 
         private $con; 
 
