@@ -6,7 +6,9 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 require '../vendor/autoload.php';
 
-require '../includes/DbOperations.php';
+require '../routes/RegistrationOperations.php';
+require '../routes/OrganisationOperations.php';
+
 
 $app = new \Slim\App([
     'settings'=>[
@@ -20,6 +22,89 @@ $app = new \Slim\App([
         "thulani" => "123456",
     ]
 ]));*/
+
+
+$app->post('/api/v1/users/registerUser', function (Request $request, Response $response) {
+    $request_data = $request->getParsedBody();
+
+    $name = $request_data['name'];
+    $surname = $request_data['surname'];
+    $dob = $request_data['dob'];
+    $email = $request_data['email'];
+    $profession = $request_data['profession'];
+    $hourlyrate= $request_data['hourlyrate'];
+    $cellNumber = $request_data['cellnumber'];
+    $organization = $request_data['organization'];
+    $username = $request_data['username'];
+    $password = $request_data['password'];
+
+    $db = new RegistrationOperations();
+    $result = $db->registerUser($name, $surname, $dob, $email, $profession, $hourlyrate, $cellNumber, $organization, $username, $password);
+    if ($result == RECORD_CREATED_SUCCESSFULLY) {
+        $message = array();
+        $message['error'] = false;
+        $message['message'] = "User register successfully";
+
+        $response->getBody()->write(json_encode($message));
+
+        return $response
+                    ->withHeader('Content-type', 'application/json')
+                    ->withStatus(201);
+
+    }  else if ($result == FAILED_TO_CREATE_RECORD) {
+        $message = array();
+        $message['error'] = true;
+        $message['message'] = "Failed to register user";
+
+        $response->getBody()->write(json_encode($message));
+
+        return $response
+                    ->withHeader('Content-type', 'application/json')
+                    ->withStatus(422);
+    }
+
+});
+
+
+    
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* 
     endpoint: createMeetingSession

@@ -1,5 +1,5 @@
 <?php
- class RegistrationOperation{
+ class MinutesOperations{
 
         private $con; 
 
@@ -8,5 +8,10 @@
             $db = new DbConnect; 
             $this->con = $db->connect(); 
         }
-     
+
+        /*
+         METHOD: create a record for the user
+         PARAMS: username, password
+        */
+       
 }
