@@ -18,11 +18,11 @@
                 $stmt = $this->con->prepare("INSERT INTO Organisation (Organisation_ID, Organisation_Name) VALUES ( ?, ?)");
                     $stmt->bind_param("ss", $organisationID, $organizationName);
                     if($stmt->execute()) {
-                        //return $organisationID;  
-                        return $this->organisationExist($organizationName);
+                        return $organisationID;  
+                        //return $this->organisationExist($organizationName);
                     } else {
-                            //return FAILED_TO_CREATE_RECORD;
-                            return $this->organisationExist($organizationName);
+                        return FAILED_TO_CREATE_RECORD;
+                           
                         }
            
          }

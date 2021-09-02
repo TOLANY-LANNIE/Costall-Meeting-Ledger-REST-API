@@ -32,7 +32,6 @@
                
             } else
                return FAILED_TO_CREATE_RECORD;
-               //return $organisation_ID;
                die( "Error preparing: (" .$con->errno . ") " . $con->error);
             
         }
