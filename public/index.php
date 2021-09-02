@@ -51,17 +51,18 @@ $app->post('/api/v1/users/registerUser', function (Request $request, Response $r
                     ->withHeader('Content-type', 'application/json')
                     ->withStatus(201);
 
-    }  else if ($result == FAILED_TO_CREATE_RECORD) {
+    }elseif ($result == RECORD_EXISTS) {
         $message = array();
         $message['error'] = true;
-        $message['message'] = "Failed to register user";
+        $message['message'] = "User already exists";
 
         $response->getBody()->write(json_encode($message));
 
         return $response
                     ->withHeader('Content-type', 'application/json')
                     ->withStatus(422);
-    }
+
+    } 
 
 });
 

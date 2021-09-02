@@ -15,16 +15,17 @@
          PARAMS: username, password
         */
         public function addOrganization($organizationName) {
-            $organisationID = uniqid("ORG"); 
+
+            if($this->organisationExist($organizationName)==null){
+                $organisationID = uniqid("ORG"); 
                 $stmt = $this->con->prepare("INSERT INTO Organisation (Organisation_ID, Organisation_Name) VALUES ( ?, ?)");
                     $stmt->bind_param("ss", $organisationID, $organizationName);
-                    if($stmt->execute()) {
+                    if($stmt->execute()) 
                         return $organisationID;  
-                        //return $this->organisationExist($organizationName);
-                    } else {
-                        return FAILED_TO_CREATE_RECORD;
-                           
-                        }
+            } else {
+                        return $this->organisationExist($organizationName);
+                            
+                }
            
          }
 
@@ -53,9 +54,9 @@
             $stmt = $this->con->prepare(" SELECT organisation_id FROM Organisation WHERE  Organisation_Name =?");
             $stmt->bind_param("s",$organisationName);
             $stmt->execute(); 
-            $stmt->bind_result($$organisationName);
+            $stmt->bind_result($id);
             $stmt->fetch(); 
-            return $organisationName; 
+            return $id; 
             
         }
 }

@@ -21,13 +21,11 @@
  
             $stmt=$this->con->prepare("INSERT INTO user_account (User_ID, Username, Password) 
             SELECT ?, ?, ?  WHERE NOT EXISTS (
-            SELECT username FROM user_account WHERE username LIKE ?
-          );");
+            SELECT username FROM user_account WHERE username LIKE ?);");
           $stmt->bind_param("ssss", $userID, $username, $passHash, $username);
              if ($stmt->execute()) {
                 return $userID;
-                $stmt->bind_result($userID);
-                $stmt->fetch();
+                
              } else {
                 return RECORD_EXISTS;
             }
