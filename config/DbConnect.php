@@ -6,7 +6,8 @@
 
         function connect(){
 
-            include_once dirname(__FILE__)  . '/Constants.php';
+            //include_once dirname(__FILE__)  . '/Constants.php';
+            require_once '../routes/Constants.php';
 
             $this->con = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME); 
 

@@ -4,7 +4,8 @@
         private $con; 
 
         function __construct(){
-            require_once dirname(__FILE__) . '/DbConnect.php';
+            require_once '../config/DbConnect.php';
+            //require_once dirname(__FILE__) . '';
             require_once dirname(__FILE__) .'/UserOperations.php';
             require_once dirname(__FILE__) .'/OrganisationOperations.php';
             
