@@ -18,11 +18,12 @@
         public function createUser($username, $password) {
              $userID = uniqid("USR");
              $passHash = md5($password);
+             $api_key = $this->generateApiKey();
  
-            $stmt=$this->con->prepare("INSERT INTO user_account (User_ID, Username, Password) 
-            SELECT ?, ?, ?  WHERE NOT EXISTS (
+            $stmt=$this->con->prepare("INSERT INTO user_account (User_ID, Username, Password,Api_key) 
+            SELECT ?, ?, ?,? WHERE NOT EXISTS (
             SELECT username FROM user_account WHERE username LIKE ?);");
-          $stmt->bind_param("ssss", $userID, $username, $passHash, $username);
+          $stmt->bind_param("sssss", $userID, $username, $passHash, $api_key,$username);
              if ($stmt->execute()) {
                 return $userID;
                 
@@ -107,6 +108,14 @@
             }
             return $rows;
         }
+
+
+         /**
+     * Generating random Unique MD5 String for user Api key
+     */
+    private function generateApiKey() {
+        return md5(uniqid(rand(), true));
+    }
 }
 
 

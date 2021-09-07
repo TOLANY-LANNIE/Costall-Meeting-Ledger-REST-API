@@ -24,13 +24,15 @@ $app = new \Slim\App([
 ]));*/
 
 
-$app->post('/api/v1/users/registerUser', function (Request $request, Response $response) {
+$app->post('/v1/register', function (Request $request, Response $response) {
     $request_data = $request->getParsedBody();
 
     $name = $request_data['name'];
     $surname = $request_data['surname'];
     $dob = $request_data['dob'];
     $email = $request_data['email'];
+    // validating email address
+     //validateEmail($email);
     $profession = $request_data['profession'];
     $hourlyrate= $request_data['hourlyrate'];
     $cellNumber = $request_data['cellnumber'];
@@ -71,7 +73,7 @@ $app->post('/api/v1/users/registerUser', function (Request $request, Response $r
     parameters: 
     method: get
 */
-$app->get('/allusers', function(Request $request, Response $response){
+$app->get('/v1/allusers', function(Request $request, Response $response){
 
     $db = new DbOperations; 
 
@@ -91,7 +93,18 @@ $app->get('/allusers', function(Request $request, Response $response){
 });
     
  
-
+/**
+ * Validating email address
+ */
+function validateEmail($email) {
+    $app = \Slim\Slim::getInstance();
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $response["error"] = true;
+        $response["message"] = 'Email address is not valid';
+        echoRespnse(400, $response);
+        $app->stop();
+    }
+}
 
 //checks if all parameter are not empty
 function hasEmptyParameters($required_params, $request, $response){
