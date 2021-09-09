@@ -83,20 +83,6 @@
    
 
 
-        /*
-        METHOD: get the id of the user based in their email address
-        PARAMS:email
-        */
-        private function getCurrentUserID($email){
-            $stmt = $this->con->prepare("SELECT registration_id FROM  registration_info WHERE email = ?");
-            $stmt->bind_param("s", $email);
-            $stmt->execute(); 
-            $stmt->bind_result($id);
-            $stmt->fetch(); 
-            return $id; 
-
-        }
-
           /*
          METHOD: gets all user in the system 
          PARAMS: non
