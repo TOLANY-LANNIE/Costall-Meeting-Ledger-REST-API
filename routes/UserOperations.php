@@ -30,7 +30,20 @@
              } else {
                 return RECORD_EXISTS;
             }
-    }
+        }
+        public function userLogin($username, $pass){
+            $password = md5($pass);
+            $stmt = $this->con->prepare("SELECT * FROM user_account WHERE username = ? AND password = ?");
+            $stmt->bind_param("ss", $username, $password);
+            $stmt->execute();
+            $stmt->store_result();
+            $num_rows= $stmt->num_rows;
+            $stmt->close(); 
+            return $num_rows; 
+
+        }
+  
+ 
         /*
          METHOD: update password 
          PARAMS: non
@@ -59,22 +72,13 @@
         METHOD: 
         PARAMS:
         */
-        public function getUserInfo($username, $password) {
-            $userID = $this->userLogin($username, $password);
-            $stmt = $this->con->prepare("SELECT r.Name, r.Surname, r.Email, r.User_ID, r.registration_id FROM registration_info r INNER JOIN user_account u ON r.user_id = u.user_id WHERE u.User_ID = ? ;");
-            $stmt->bind_param("s", $userID);
-            if ($stmt->execute()) {
-               $result = $stmt->get_result();
-               $userInfo = array();
-               while ($row = $result->fetch_assoc()) {
-                array_push($userInfo, $row);
-               }
-               return $userInfo;
-               return USER_DETAILS_RETRIEVED;
-            }else {
-   
-            }
-            
+        public function getUserInfo($username) {
+            $stmt = $this->con->prepare("SELECT r.Name, r.Surname, r.Email, r.User_ID, r.Registration_ID, u.Username, u.Api_key  FROM registration_info r INNER JOIN user_account u ON r.user_id = u.user_id WHERE u.Username = ? ;");
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $user= $stmt->get_result()->fetch_assoc();
+            $stmt->close();
+            return $user;          
          }
    
 
@@ -98,8 +102,7 @@
          PARAMS: non
         */
         public function getAllUsers(){
-         
-            $stmt = $this->con->prepare("SELECT Registration_ID,Name,Surname,Profession,o.Organisation_Name,o.Department FROM registration_info r INNER JOIN organisation o ON r.Organisation_ID = o.Organisation_ID");
+            $stmt = $this->con->prepare("SELECT r.Name,r.Surname, r.Profession,o.Organisation_Name FROM registration_info r INNER JOIN organisation o ON r.Organisation_ID = o.Organisation_ID ");
             $stmt->execute();
             $result = $stmt->get_result(); // get the mysqli result
             $rows = array();
@@ -116,6 +119,7 @@
     private function generateApiKey() {
         return md5(uniqid(rand(), true));
     }
+
 }
 
 

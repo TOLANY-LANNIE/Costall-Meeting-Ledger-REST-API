@@ -8,6 +8,7 @@ require '../vendor/autoload.php';
 
 require '../routes/RegistrationOperations.php';
 require '../routes/OrganisationOperations.php';
+require '../routes/UserOperations.php';
 
 
 $app = new \Slim\App([
@@ -64,6 +65,17 @@ $app->post('/v1/register', function (Request $request, Response $response) {
                     ->withHeader('Content-type', 'application/json')
                     ->withStatus(422);
 
+    }elseif ($result == FAILED_TO_CREATE_RECORD) {
+        $message = array();
+        $message['error'] = true;
+        $message['message'] = "Failed to register user";
+
+        $response->getBody()->write(json_encode($message));
+
+        return $response
+                    ->withHeader('Content-type', 'application/json')
+                    ->withStatus(422);
+
     } 
 
 });
@@ -75,7 +87,7 @@ $app->post('/v1/register', function (Request $request, Response $response) {
 */
 $app->get('/v1/allusers', function(Request $request, Response $response){
 
-    $db = new DbOperations; 
+    $db = new UserOperations; 
 
     $users = $db->getAllUsers();
 
@@ -91,7 +103,51 @@ $app->get('/v1/allusers', function(Request $request, Response $response){
     ->withStatus(200);  
 
 });
-    
+  
+/* 
+    endpoint: login
+    parameters: username and password
+    method: post
+*/
+
+$app->post('/v1/login', function (Request $request, Response $response) {
+    $request_data = $request->getParsedBody();
+
+    $username = $request_data['username'];
+    $password = $request_data['password'];
+
+    $db = new UserOperations;
+    $message = array();
+    if($db->userLogin($username, $password)){
+        $user = $db->getUserInfo($username);
+        $message['error'] = false;
+        $message['Registration_ID'] = $user['Registration_ID'];
+        $message['Name'] = $user['Name'];
+        $message['Surname'] = $user['Surname'];
+        $message['Email'] = $user['Email'];
+        $message['UserID'] = $user['User_ID'];
+        $message['Username'] = $user['Username'];
+        $message['Api_Key'] = $user['Api_key'];
+
+        $response->getBody()->write(json_encode($message));
+
+        return $response
+                    ->withHeader('Content-type', 'application/json')
+                    ->withStatus(200);
+
+    }else{
+        $message = array();
+        $message['error'] = true;
+        $message['message'] = "Invalid username or password";
+
+        $response->getBody()->write(json_encode($message));
+
+        return $response
+                    ->withHeader('Content-type', 'application/json')
+                    ->withStatus(422);
+
+    }
+});
  
 /**
  * Validating email address

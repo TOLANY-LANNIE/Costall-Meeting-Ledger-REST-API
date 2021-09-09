@@ -4,7 +4,7 @@
         private $con; 
 
         function __construct(){
-            require_once dirname(__FILE__) . '/DbConnect.php';
+            require_once '../config/DbConnect.php';
             $db = new DbConnect; 
             $this->con = $db->connect(); 
         }
