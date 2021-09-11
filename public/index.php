@@ -100,7 +100,7 @@ $app->get('/v1/allusers', function(Request $request, Response $response){
 
     return $response
     ->withHeader('Content-type', 'application/json')
-    ->withStatus(200);  
+    ->withStatus(201);  
 
 });
   
