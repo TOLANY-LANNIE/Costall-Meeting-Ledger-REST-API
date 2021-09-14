@@ -63,7 +63,7 @@ $app->post('/v1/register', function (Request $request, Response $response) {
 
         return $response
                     ->withHeader('Content-type', 'application/json')
-                    ->withStatus(422);
+                    ->withStatus(409);
 
     }elseif ($result == FAILED_TO_CREATE_RECORD) {
         $message = array();
@@ -100,7 +100,7 @@ $app->get('/v1/allusers', function(Request $request, Response $response){
 
     return $response
     ->withHeader('Content-type', 'application/json')
-    ->withStatus(201);  
+    ->withStatus(200);  
 
 });
   
@@ -148,6 +148,7 @@ $app->post('/v1/login', function (Request $request, Response $response) {
 
     }
 });
+
  
 /**
  * Validating email address
