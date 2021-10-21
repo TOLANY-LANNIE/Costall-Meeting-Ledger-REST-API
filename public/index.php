@@ -149,6 +149,34 @@ $app->post('/v1/login', function (Request $request, Response $response) {
     }
 });
 
+
+$container = $app->getContainer();
+$container['upload_directory'] ='../profile_pictures/';
+
+$app->post('/photo', function (Request $request, Response  $response) use ($app) {
+
+$directory = $this->get('upload_directory');
+
+$uploadedFiles = $request->getUploadedFiles();
+
+$uploadedFile = $uploadedFiles['picture'];
+  if($uploadedFile->getError() === UPLOAD_ERR_OK) {
+    $filename = moveUploadedFile($directory, $uploadedFile);
+    $response->write('uploaded ' . $filename . '<br/>');
+ }
+
+ });
+
+
+ function moveUploadedFile($directory, UploadedFile $uploadedFile){
+ $extension = pathinfo($uploadedFile->getClientFilename(), 
+ PATHINFO_EXTENSION);
+ $basename = bin2hex(random_bytes(8));
+ $filename = sprintf('%s.%0.8s', $basename, $extension);
+ $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
+
+return $filename;
+}
  
 /**
  * Validating email address

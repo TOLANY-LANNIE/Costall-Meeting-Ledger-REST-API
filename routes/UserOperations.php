@@ -42,7 +42,7 @@
             return $num_rows; 
 
         }
-  
+
  
         /*
          METHOD: update password 
